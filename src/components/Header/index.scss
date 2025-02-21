@@ -1,0 +1,28 @@
+.header {
+  padding: 25px 0;
+
+  .site-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+
+  &__profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px;
+    border: 1px solid var(--black-color);
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  &__logout {
+    cursor: pointer;
+  }
+}

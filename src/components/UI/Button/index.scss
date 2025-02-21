@@ -1,0 +1,20 @@
+.submit-button {
+  width: max-content;
+  padding: 13px 95px;
+  border: none;
+  border-radius: 20px;
+  outline: none;
+  font-size: 20px;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--black-color);
+  background-color: var(--primary-color);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  transition: 0.3s all;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(0.98);
+    background-color: #9bd521;
+  }
+}

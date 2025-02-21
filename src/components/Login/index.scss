@@ -1,0 +1,19 @@
+.login-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 50px 0;
+
+  &__swap-form {
+    margin-top: 55px;
+    font-size: 20px;
+    line-height: 1.2;
+  }
+
+  &__swap-link {
+    text-decoration: underline;
+    cursor: pointer;
+    text-underline-offset: 4px;
+  }
+}
