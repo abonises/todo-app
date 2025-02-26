@@ -28,59 +28,6 @@
       width: 100%;
     }
 
-    &__input-container {
-      position: relative;
-      width: 100%;
-    }
-
-    &__label {
-      position: absolute;
-      top: 13px;
-      left: 5%;
-      z-index: 100;
-      color: var(--black-color);
-      font-size: 20px;
-      line-height: 1.2;
-      width: 100%;
-      cursor: text;
-      transition: 0.3s all;
-    }
-
-    &__input {
-      max-height: 50px;
-      width: 100%;
-      height: 100%;
-      padding: 18px 25px 8px 25px;
-      outline: none;
-      box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-      border: 1px solid transparent;
-      border-radius: 20px;
-      background-color: var(--gray-color);
-      transition: 0.3s all;
-
-      &:focus {
-        border: 1px solid rgba(0, 0, 0, 0.5);
-      }
-
-      &:focus ~ .profile__label {
-        top: 5%;
-        left: 4%;
-        font-size: 10px;
-      }
-
-      &:not(:placeholder-shown) ~ .profile__label,
-      &:not(:placeholder-shown) ~ .profile__label {
-        top: 5%;
-        left: 4%;
-        font-size: 10px;
-      }
-
-      &.validate {
-        border-color: #FF0000;
-      }
-    }
-
-    &__validate-error,
     &__error-edit {
       margin-top: 6px;
       font-size: 14px;
@@ -112,6 +59,13 @@
         transform: scale(0.97);
         transition: 0.3s all;
         box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.25);
+      }
+    }
+
+    @media screen and (max-width: 575px) {
+      &__image-container {
+        min-width: 250px;
+        min-height: 250px;
       }
     }
 

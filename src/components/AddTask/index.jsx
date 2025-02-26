@@ -6,6 +6,8 @@ import './index.scss'
 import {db, doc, updateDoc} from "../../firabase/firebase.js";
 import {useAuth} from "../../context/auth.jsx";
 import {getDoc} from "firebase/firestore";
+import InputField from "../UI/InputField/index.jsx";
+import {validateTask} from "../../utils/validation.js";
 
 const Index = () => {
   
@@ -25,33 +27,17 @@ const Index = () => {
     return () => clearTimeout(timerMessage);
   }, [isSuccessful]);
   
-  const validate = (title, description) => {
-    let isValid = true;
-    
-    const formErrors = { title: '', description: '' };
-    
-    if(title.length < 2 || title.length === 0) {
-      formErrors.title = 'Minimum 2 length'
-      isValid = false
-    }
-    
-    if (description.length < 2 || description.length === 0) {
-      formErrors.description = 'Minimum 2 length'
-      isValid = false
-    }
-    
-    setErrors(formErrors)
-    
-    return isValid
-  }
-  
   const handleCreateTask = async (e) => {
     e.preventDefault();
     
     setIsSuccessful(false)
     setIsLoading(true)
     
-    if(validate(title, description)) {
+    const { isValid, formErrors } = validateTask(title, description)
+    
+    setErrors(formErrors)
+    
+    if(isValid) {
       try {
         const userId = user.id
         
@@ -82,6 +68,8 @@ const Index = () => {
           setUserData(updatedUserObject);
           
           setIsSuccessful(true);
+          setTitle('');
+          setDescription('');
         }
         
       } catch(err) {
@@ -101,19 +89,15 @@ const Index = () => {
           <h2 className='add-task__title'>
             Let’s create some tasks
           </h2>
-          <div className='add-task__title-container add-task__input-container'>
-            <input
-                className={cn('add-task__title-input add-task__input', errors.title && 'validate')}
-                placeholder=''
-                type="text"
-                name='title'
-                id='title'
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-            />
-            <label className='add-task__title-label add-task__label' htmlFor="title">Title</label>
-            <div className='add-task__validate-error'>{errors.title}</div>
-          </div>
+          <InputField
+              type='text'
+              name='title'
+              id='title'
+              value={title}
+              handleState={setTitle}
+              labelTitle='Title'
+              error={errors.title}
+          />
           <div className='add-task__description-container add-task__input-container'>
             <textarea
                 className={cn('add-task__description-input add-task__textarea', errors.description && 'validate')}

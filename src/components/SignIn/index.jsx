@@ -1,12 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState } from 'react';
 import './index.scss'
-import cn from 'classnames';
 import { auth, db, signInWithEmailAndPassword, getDoc, doc } from '../../firabase/firebase.js';
 import {useAuth} from "../../context/auth.jsx";
 import {useNavigate} from "react-router-dom";
 import {emailRegex} from "../../utils/validation.js";
 import Loader from "../UI/Loader/index.jsx";
 import Button from "../UI/Button/index.jsx";
+import {validationErrors} from "../../constants/errors.js";
+import InputField from "../UI/InputField/index.jsx";
 
 const Index = () => {
   const { login } = useAuth();
@@ -23,12 +24,12 @@ const Index = () => {
     const formErrors = { email: '', password: '' };
     
     if (!emailRegex.test(email) || email.length === 0) {
-      formErrors.email = 'Incorrect email format'
+      formErrors.email = validationErrors.emailError
       isValid = false
     }
     
     if (password.length < 8 || password.length === 0) {
-      formErrors.password = 'Password must be at least 8 characters'
+      formErrors.password = validationErrors.passwordError
       isValid = false
     }
     
@@ -66,6 +67,8 @@ const Index = () => {
       } finally {
         setIsLoading(false)
       }
+    } else {
+      setIsLoading(false)
     }
   }
   
@@ -75,32 +78,24 @@ const Index = () => {
         <h2 className="login__title">Sign In</h2>
         <form onSubmit={handleLogin} className='login__form'>
           <div className='login__error'>{errorMessage}</div>
-          <div className='login__email-container login__input-container'>
-            <input
-                className={cn('login__email-input login__input', errors.email && 'validate')}
-                placeholder=''
-                type="email"
-                name='email'
-                id='email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
-            <label className='login__email-label login__label' htmlFor="email">Email</label>
-            <div className='login__validate-error'>{errors.email}</div>
-          </div>
-          <div className='login__password-container login__input-container'>
-            <input
-                className={cn('login__password-input login__input', errors.password && 'validate')}
-                type="password"
-                placeholder=''
-                name='password'
-                id='password'
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <label className='login__password-label login__label' htmlFor="password">Password</label>
-            <div className='login__validate-error'>{errors.password}</div>
-          </div>
+          <InputField
+              type='email'
+              name='email'
+              id='email'
+              value={email}
+              handleState={setEmail}
+              labelTitle='Email'
+              error={errors.email}
+          />
+          <InputField
+              type='password'
+              name='password'
+              id='password'
+              value={password}
+              handleState={setPassword}
+              labelTitle='New Password'
+              error={errors.password}
+          />
           {!isLoading ? (
               <Button
                 text='Go'

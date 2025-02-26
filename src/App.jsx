@@ -9,16 +9,18 @@ function App() {
 
   return (
     <div className='app'>
-      <Header />
-      <Routes>
-        <Route element={ <PrivateRoute /> }>
-          <Route path="/" element={ <Home /> } />
-          <Route path="/profile" element={ <Profile /> } />
-        </Route>
-        <Route path="/login" element={<Login />} />
-        
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <div className="site-container">
+        <Header />
+        <Routes>
+          <Route element={ <PrivateRoute /> }>
+            <Route path="/" element={ <Home /> } />
+            <Route path="/profile" element={ <Profile /> } />
+          </Route>
+          <Route path="/login" element={<Login />} />
+          
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
     </div>
   )
 }

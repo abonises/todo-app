@@ -1,14 +1,15 @@
 import React from 'react';
 import './index.scss'
 
-const Index = ({ text, handler }) => {
+const Index = ({ text, handler, disabled }) => {
   return (
       <>
         <input
-            className='submit-button'
+            className={`submit-button ${disabled ? 'disabled' : ''}`}
             type="submit"
             value={text}
-            onClick={(e) => handler(e)}
+            onClick={(e) => !disabled && handler(e)}
+            disabled={disabled}
         />
       </>
   );

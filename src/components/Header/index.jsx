@@ -27,20 +27,18 @@ const Index = () => {
   
   return (
       <header className='header'>
-        <div className="site-container">
-          <a href='/' className='header__logo-box'>
-            <img src="/logo.png" alt="logo"/>
-          </a>
-          <div className="header__links">
-            {user && !isProfile && (
-                <div className="header__profile" onClick={() => handleProfile()}>
-                  <img src="/user.svg" alt="profile"/>
-                </div>
-            )}
-            {user && (
-                <img className='header__logout' src="/logout.png" alt="logout" onClick={() => handleLogout()} />
-            )}
-          </div>
+        <a href='/' className='header__logo-box'>
+          <img src="/logo.png" alt="logo"/>
+        </a>
+        <div className="header__links">
+          {user && !isProfile && (
+              <div className="header__profile" onClick={() => handleProfile()}>
+                <img src="/user.svg" alt="profile"/>
+              </div>
+          )}
+          {user && (
+              <img className='header__logout' src="/logout.png" alt="logout" onClick={() => handleLogout()}/>
+          )}
         </div>
       </header>
   );

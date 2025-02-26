@@ -1,0 +1,93 @@
+.tasks {
+  display: flex;
+  justify-content: center;
+  gap: 75px;
+  margin-top: 75px;
+  padding: 35px 75px 100px 75px;
+  min-height: 900px;
+  border-radius: 15px;
+  box-shadow: 3px 3px 4px 4px rgba(0, 0, 0, 0.25);
+
+  @media screen and (max-width: 1280px) {
+    & {
+      gap: 35px;
+      padding: 35px;
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    & {
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    &__separator {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 575px) {
+    & {
+      padding: 20px;
+    }
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 35px;
+    width: 100%;
+
+    &.dragging {
+      border: 1px solid black;
+    }
+  }
+
+  &__title {
+    text-transform: uppercase;
+    font-size: 2rem;
+    color: var(--black-color);
+  }
+
+  &__separator {
+    width: 1px;
+    background-color: var(--black-color);
+    max-height: 90%;
+    justify-self: flex-end;
+  }
+
+  &__list {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+    width: 100%;
+  }
+
+  &__list-info {
+    text-transform: uppercase;
+    margin-top: 50px;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+
+    @media screen and (max-width: 575px) {
+      & {
+        text-align: center;
+      }
+    }
+  }
+
+  [data-rbd-draggable-id] {
+    width: 100%;
+  }
+}
+
+.task-placeholder {
+  &.dragging {
+    opacity: 0.5;
+    transform: scale(1.05);
+    box-shadow: none;
+  }
+}

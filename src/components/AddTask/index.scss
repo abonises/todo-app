@@ -1,6 +1,28 @@
 .add-task {
   max-width: 500px;
 
+  @media screen and (max-width: 1024px) {
+    & {
+      order: 2;
+      width: 100%;
+      max-width: 600px;
+    }
+  }
+
+  @media screen and (max-width: 575px) {
+    &__title {
+      text-align: center;
+      line-height: 3rem;
+    }
+  }
+
+  @media screen and (max-width: 375px) {
+    &__title {
+      font-size: 2.2rem;
+      line-height: 2.5rem;
+    }
+  }
+
   &__form {
     display: flex;
     flex-direction: column;
@@ -38,8 +60,7 @@
     transition: 0.3s all;
   }
 
-  &__input,
-  &__textarea{
+  &__textarea {
     max-height: 50px;
     width: 100%;
     height: 100%;
@@ -79,8 +100,7 @@
     resize: vertical;
   }
 
-  &__validate-error,
-  &__error-edit {
+  &__validate-error {
     margin-top: 6px;
     font-size: 14px;
     line-height: 1.2;

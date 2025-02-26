@@ -1,0 +1,93 @@
+.task {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 30px 15px 50px 30px;
+  width: 100%;
+  border-radius: 10px;
+  background-color: #E4FFAB;
+  box-shadow: 3px 3px 4px 4px rgba(0, 0, 0, 0.25);
+
+  &:hover {
+    background-color: #d3f38f;
+  }
+
+  @media screen and (max-width: 768px) {
+    & {
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    max-width: 285px;
+  }
+
+  &__manage {
+    display: flex;
+    gap: 15px;
+  }
+
+  &__title {
+    font-size: 2rem;
+  }
+
+  &__description,
+  &__textarea-field {
+    margin-top: 1rem;
+    font-size: 15px;
+  }
+
+  @media screen and (max-width: 575px) {
+    &__info {
+      overflow: hidden;
+    }
+
+    &__title {
+      font-size: 1.2rem;
+    }
+
+    &__trash-icon,
+    &__edit-icon,
+    &__complete-icon {
+      max-width: 25px;
+    }
+  }
+
+  &__trash-icon,
+  &__edit-icon,
+  &__complete-icon {
+    cursor: pointer;
+    transition: 0.3s all;
+
+    &:hover {
+      filter: brightness(60%);
+    }
+  }
+
+  &__validate-error {
+    margin-top: 2px;
+    font-size: 8px;
+    color: #FF0000;
+  }
+
+  &__input-field,
+  &__textarea-field {
+    outline: none;
+    border: none;
+    background: transparent;
+    overflow: hidden;
+    border-bottom: 1px solid var(--black-color);
+  }
+
+  &__input-field {
+    font-size: 2rem;
+  }
+
+  &__textarea-field {
+    font-size: 15px;
+    resize: none;
+  }
+
+}

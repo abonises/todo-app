@@ -17,4 +17,9 @@
     transform: scale(0.98);
     background-color: #9bd521;
   }
+
+  &.disabled {
+    pointer-events: none;
+    background-color: #c0e17c;
+  }
 }

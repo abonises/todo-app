@@ -2,11 +2,13 @@ import React, {useEffect, useState} from 'react';
 import './index.scss'
 import {useAuth} from "../../context/auth.jsx";
 import cn from "classnames";
-import {auth, createUserWithEmailAndPassword, db, doc, setDoc, updateDoc, updatePassword, updateEmail} from "../../firabase/firebase.js";
+import {auth, db, doc, updateDoc, updatePassword, updateEmail} from "../../firabase/firebase.js";
 import {loadImage} from "../../utils/cloudinary.js";
 import {emailRegex} from "../../utils/validation.js";
 import Loader from "../UI/Loader/index.jsx";
 import Button from "../UI/Button/index.jsx";
+import {validationErrors} from "../../constants/errors.js";
+import InputField from "../UI/InputField/index.jsx";
 
 const Index = () => {
   const { user, setUserData } = useAuth();
@@ -18,7 +20,9 @@ const Index = () => {
   const [image, setImage] = useState();
   const [isSuccessful, setIsSuccessful] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [confirmMessage, setConfirmMessage] = useState(false);
   const [errors, setErrors] = useState({ email: '', password: '' , name: '', age: ''})
+  const [isChanged, setIsChanged] = useState(false)
   
   useEffect(() => {
     const timerMessage = setTimeout(() => {
@@ -27,28 +31,47 @@ const Index = () => {
     
     return () => clearTimeout(timerMessage);
   }, [isSuccessful]);
+  
+  useEffect(() => {
+    if (
+        email !== user.email ||
+        name !== user.name ||
+        age !== user.age ||
+        password.length > 0 ||
+        image
+    ) {
+      setIsChanged(true);
+    } else {
+      setIsChanged(false);
+    }
+  }, [email, name, age, password, image, user]);
+  
+  useEffect(() => {
+    setIsChanged(false);
+  }, [user]);
+  
   const validate = (email, password, name, age) => {
     let isValid = true;
     
     const formErrors = { email: '', password: '', name: '', age: ''};
     
     if (!emailRegex.test(email) || email.length === 0) {
-      formErrors.email = 'Incorrect email format'
+      formErrors.email = validationErrors.passwordError
       isValid = false
     }
     
     if (password.length > 0 && password.length < 8) {
-      formErrors.password = 'Password must be at least 8 characters'
+      formErrors.password = validationErrors.emailError
       isValid = false
     }
     
     if (age < 18 || age.length === 0) {
-      formErrors.age = 'You must be 18 y.o for registration'
+      formErrors.age = validationErrors.ageError
       isValid = false
     }
     
     if (name.length < 2 || name.length === 0) {
-      formErrors.name = 'Minimum 2 length'
+      formErrors.name = validationErrors.nameError
       isValid = false
     }
     
@@ -59,6 +82,7 @@ const Index = () => {
   const handleEdit = async (e) => {
     e.preventDefault()
     
+    setConfirmMessage(false)
     setIsSuccessful(false)
     setIsLoading(true)
     
@@ -72,7 +96,6 @@ const Index = () => {
         const userObject = {
           id: userId,
           name: name,
-          email: email,
           age: age,
         }
         
@@ -85,10 +108,19 @@ const Index = () => {
         if (password.length > 0) {
           await updatePassword(userFirebase, password);
         }
-
-        // await updateEmail(userFirebase, email);
+        
+        // try {
+        //   await updateEmail(userFirebase, email);
+        //   setConfirmMessage(true);
+        //   userObject.email = email;
+        // } catch (emailError) {
+        //   console.error("Error change email:", emailError.message);
+        //   setConfirmMessage(true);
+        // }
+        
         await updateDoc(userDoc, userObject);
         setUserData(userObject);
+        setIsChanged(false)
         
         setIsSuccessful(true)
       } catch(err) {
@@ -96,6 +128,7 @@ const Index = () => {
         setIsLoading(true)
       } finally {
         setIsLoading(false)
+        setIsChanged(false)
       }
     } else {
       setIsLoading(false)
@@ -123,63 +156,49 @@ const Index = () => {
               />
               <img className='profile__edit-icon' src="/edit-icon.svg" alt="image-edit-icon"/>
             </div>
-            <div className='profile__name-container profile__input-container'>
-              <input
-                  className={cn('profile__name-input profile__input', errors.name && 'validate')}
-                  placeholder=''
-                  type="text"
-                  name='name'
-                  id='name'
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-              />
-              <label className='profile__name-label profile__label' htmlFor="name">Name</label>
-              <div className='profile__validate-error'>{errors.name}</div>
-            </div>
-            <div className='profile__email-container profile__input-container'>
-              <input
-                  className={cn('profile__email-input profile__input', errors.email && 'validate')}
-                  placeholder=''
-                  type="email"
-                  name='email'
-                  id='email'
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-              />
-              <label className='profile__email-label profile__label' htmlFor="email">Email</label>
-              <div className='profile__validate-error'>{errors.email}</div>
-            </div>
-            <div className='profile__password-container profile__input-container'>
-              <input
-                  className={cn('profile__password-input profile__input', errors.password && 'validate')}
-                  type="password"
-                  placeholder=''
-                  name='password'
-                  id='password'
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-              />
-              <label className='profile__password-label profile__label' htmlFor="password">New Password</label>
-              <div className='profile__validate-error'>{errors.password}</div>
-            </div>
-            <div className='profile__age-container profile__input-container'>
-              <input
-                  className={cn('profile__age-input profile__input', errors.age && 'validate')}
-                  placeholder=''
-                  type="number"
-                  name='age'
-                  id='age'
-                  value={age}
-                  onChange={(e) => setAge(e.target.value)}
-              />
-              <label className='profile__age-label profile__label' htmlFor="age">Age</label>
-              <div className='profile__validate-error'>{errors.age}</div>
-            </div>
+            <InputField
+                type='text'
+                name='name'
+                id='name'
+                value={name}
+                handleState={setName}
+                labelTitle='Name'
+                error={errors.name}
+            />
+            <InputField
+                type='email'
+                name='email'
+                id='email'
+                value={email}
+                handleState={setEmail}
+                labelTitle='Email'
+                error={errors.email}
+            />
+            {confirmMessage && <span className='profile__successful'>Please check your original address for confirm change your email</span>}
+            <InputField
+                type='password'
+                name='password'
+                id='password'
+                value={password}
+                handleState={setPassword}
+                labelTitle='New Password'
+                error={errors.password}
+            />
+            <InputField
+                type='number'
+                name='age'
+                id='age'
+                value={age}
+                handleState={setAge}
+                labelTitle='Age'
+                error={errors.age}
+            />
             {isSuccessful && <span className='profile__successful'>Data changed</span>}
             {!isLoading ? (
                 <Button
                     text='Go'
                     handler={handleEdit}
+                    disabled={!isChanged || isLoading}
                 />
             ) : (
                 <Loader />

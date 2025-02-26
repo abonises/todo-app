@@ -1,0 +1,21 @@
+.home {
+  padding-bottom: 60px;
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  @media screen and (max-width: 1024px) {
+
+    & {
+      padding: 50px 0;
+    }
+
+    &__top {
+      flex-direction: column;
+      gap: 50px;
+    }
+  }
+}
