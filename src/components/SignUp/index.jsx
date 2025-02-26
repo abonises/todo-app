@@ -63,10 +63,13 @@ const Index = () => {
         
         const userObject = {
           id: userId,
-          name: name,
+          firstName: name,
+          lastName: '',
           email: email,
           age: age,
           tasks: [],
+          loginsCount: 0,
+          role: 'user',
           image: ''
         }
         
@@ -131,7 +134,7 @@ const Index = () => {
                 id='password'
                 value={password}
                 handleState={setPassword}
-                labelTitle='New Password'
+                labelTitle='Password'
                 error={errors.password}
             />
           </div>

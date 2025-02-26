@@ -4,6 +4,7 @@ import Header from "./components/Header/index.jsx";
 import Login from "./components/Login/index.jsx";
 import Profile from "./components/Profile/index.jsx";
 import PrivateRoute from "./components/PrivateRoute/index.jsx";
+import AdminPanel from "./components/AdminPanel/index.jsx";
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
           <Route element={ <PrivateRoute /> }>
             <Route path="/" element={ <Home /> } />
             <Route path="/profile" element={ <Profile /> } />
+            <Route path="/admin" element={ <AdminPanel /> } />
           </Route>
           <Route path="/login" element={<Login />} />
           

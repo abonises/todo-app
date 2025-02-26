@@ -6,13 +6,24 @@ import { useLocation } from 'react-router-dom'
 
 const Index = () => {
   const [isProfile, setIsProfile] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const location = useLocation();
   
   useEffect(() => {
-    location.pathname === '/profile' ? setIsProfile(true) : setIsProfile(false)
+    if(location.pathname === '/profile') {
+      setIsProfile(true)
+    } else {
+      setIsProfile(false)
+    }
+    
+    if(location.pathname === '/admin') {
+      setIsAdmin(true)
+    } else {
+      setIsAdmin(false)
+    }
   }, [location.pathname]);
   
   
@@ -25,12 +36,24 @@ const Index = () => {
     navigate('/profile');
   }
   
+  const handleAdmin = () => {
+    navigate('/admin');
+  }
+  
   return (
       <header className='header'>
         <a href='/' className='header__logo-box'>
           <img src="/logo.png" alt="logo"/>
         </a>
         <div className="header__links">
+          {user && (
+              <span className='header__login-count'>Logins Count: {user.loginsCount || 0}</span>
+          )}
+          {user && user.role === 'admin' && !isAdmin &&  (
+              <div className="header__admin" onClick={() => handleAdmin()}>
+                A
+              </div>
+          )}
           {user && !isProfile && (
               <div className="header__profile" onClick={() => handleProfile()}>
                 <img src="/user.svg" alt="profile"/>

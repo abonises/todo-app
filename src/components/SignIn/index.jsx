@@ -8,6 +8,7 @@ import Loader from "../UI/Loader/index.jsx";
 import Button from "../UI/Button/index.jsx";
 import {validationErrors} from "../../constants/errors.js";
 import InputField from "../UI/InputField/index.jsx";
+import {updateDoc} from "firebase/firestore";
 
 const Index = () => {
   const { login } = useAuth();
@@ -50,10 +51,15 @@ const Index = () => {
         const userId = user.uid;
         
         const userDoc = doc(db, "users", userId);
-        const userDocData = await getDoc(userDoc);
+        const userDocData = await getDoc(userDoc)
         
         if (userDocData.exists()) {
           const userObject = userDocData.data();
+          
+          const newLoginCount = (userObject.loginsCount || 0) + 1;
+          await updateDoc(userDoc, { loginsCount: newLoginCount });
+          
+          userObject.loginsCount++
           
           login(userObject);
           navigate('/')

@@ -9,20 +9,28 @@ import Loader from "../UI/Loader/index.jsx";
 import Button from "../UI/Button/index.jsx";
 import {validationErrors} from "../../constants/errors.js";
 import InputField from "../UI/InputField/index.jsx";
+import Modal from "../UI/Modal/index.jsx";
+import {deleteDoc} from "firebase/firestore";
+import {deleteUser, EmailAuthProvider, reauthenticateWithCredential} from "firebase/auth";
 
 const Index = () => {
-  const { user, setUserData } = useAuth();
+  const { user, setUserData, logout } = useAuth();
   
   const [email, setEmail] = useState(user.email);
   const [password, setPassword] = useState('');
-  const [name, setName] = useState(user.name);
+  const [deletePassword, setDeletePassword] = useState('');
+  const [firstName, setFirstName] = useState(user.firstName);
+  const [lastName, setLastName] = useState(user.lastName);
   const [age, setAge] = useState(user.age);
   const [image, setImage] = useState();
   const [isSuccessful, setIsSuccessful] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState(false);
-  const [errors, setErrors] = useState({ email: '', password: '' , name: '', age: ''})
+  const [errors, setErrors] = useState({ email: '', password: '' , firstName: '', lastName: '', age: ''})
   const [isChanged, setIsChanged] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleteError, setDeleteError] = useState(false);
+  
   
   useEffect(() => {
     const timerMessage = setTimeout(() => {
@@ -35,7 +43,8 @@ const Index = () => {
   useEffect(() => {
     if (
         email !== user.email ||
-        name !== user.name ||
+        firstName !== user.firstName ||
+        lastName !== user.lastName ||
         age !== user.age ||
         password.length > 0 ||
         image
@@ -44,24 +53,24 @@ const Index = () => {
     } else {
       setIsChanged(false);
     }
-  }, [email, name, age, password, image, user]);
+  }, [email, firstName, lastName, age, password, image, user]);
   
   useEffect(() => {
     setIsChanged(false);
   }, [user]);
   
-  const validate = (email, password, name, age) => {
+  const validate = (email, password, firstName, lastName, age) => {
     let isValid = true;
     
-    const formErrors = { email: '', password: '', name: '', age: ''};
+    const formErrors = { email: '', password: '', firstName: '', lastName: '', age: ''};
     
     if (!emailRegex.test(email) || email.length === 0) {
-      formErrors.email = validationErrors.passwordError
+      formErrors.email = validationErrors.emailError
       isValid = false
     }
     
     if (password.length > 0 && password.length < 8) {
-      formErrors.password = validationErrors.emailError
+      formErrors.password = validationErrors.passwordError
       isValid = false
     }
     
@@ -70,8 +79,13 @@ const Index = () => {
       isValid = false
     }
     
-    if (name.length < 2 || name.length === 0) {
-      formErrors.name = validationErrors.nameError
+    if (firstName.length < 2 || firstName.length === 0) {
+      formErrors.firstName = validationErrors.nameError
+      isValid = false
+    }
+    
+    if (lastName.length > 0 && lastName.length < 2) {
+      formErrors.lastName = validationErrors.nameError
       isValid = false
     }
     
@@ -86,7 +100,7 @@ const Index = () => {
     setIsSuccessful(false)
     setIsLoading(true)
     
-    if(validate(email, password, name, age)) {
+    if(validate(email, password, firstName, lastName, age)) {
       try {
         const userFirebase = auth.currentUser
         const userId = user.id
@@ -95,8 +109,12 @@ const Index = () => {
         
         const userObject = {
           id: userId,
-          name: name,
+          firstName: firstName,
           age: age,
+        }
+        
+        if (lastName.length > 0) {
+          userObject.lastName = lastName
         }
         
         if(image) {
@@ -104,7 +122,7 @@ const Index = () => {
         } else {
           userObject.image = user.image;
         }
-
+        
         if (password.length > 0) {
           await updatePassword(userFirebase, password);
         }
@@ -135,6 +153,29 @@ const Index = () => {
     }
   }
   
+  const handleDeleteAccount = async (e) => {
+    setDeleteError(false)
+    
+    const currentUser = auth.currentUser
+    
+    const userId = currentUser.uid
+    
+    try {
+      
+      const credential = EmailAuthProvider.credential(user.email, deletePassword);
+      
+      await reauthenticateWithCredential(currentUser, credential)
+      
+      await deleteDoc(doc(db, "users", userId));
+      
+      await deleteUser(currentUser);
+      
+      logout()
+    } catch (error) {
+      setDeleteError(true)
+    }
+  }
+  
   return (
       <div className='profile__wrapper'>
         <div className='profile'>
@@ -156,14 +197,37 @@ const Index = () => {
               />
               <img className='profile__edit-icon' src="/edit-icon.svg" alt="image-edit-icon"/>
             </div>
+            <div className='profile__delete'>
+              Wanna delete account? <span onClick={() => setIsModalOpen(true)} className='profile__delete-text'>Click for delete</span>
+            </div>
+            <Modal
+                isModalOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+            >
+              <h2 className='profile__modal-text'>If you want to delete your account, please enter your password</h2>
+              <div className='profile__modal-box'>
+                <input className='profile__modal-input' type="password" value={deletePassword} onChange={(e) => setDeletePassword(e.target.value)}/>
+                <button type='button' className='profile__modal-btn' onClick={handleDeleteAccount}>Delete</button>
+              </div>
+              {deleteError && <div className='profile__error-edit'>Incorrect password</div>}
+            </Modal>
             <InputField
                 type='text'
-                name='name'
-                id='name'
-                value={name}
-                handleState={setName}
-                labelTitle='Name'
-                error={errors.name}
+                name='firstName'
+                id='firstName'
+                value={firstName}
+                handleState={setFirstName}
+                labelTitle='First Name'
+                error={errors.firstName}
+            />
+            <InputField
+                type='text'
+                name='lastName'
+                id='lastName'
+                value={lastName}
+                handleState={setLastName}
+                labelTitle='Last Name'
+                error={errors.lastName}
             />
             <InputField
                 type='email'
