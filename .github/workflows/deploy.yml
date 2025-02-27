@@ -1,0 +1,39 @@
+name: Deploy Vite React App to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Change this if your default branch is different
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Create .env File
+        run: |
+          echo "VITE_API_KEY=${{ secrets.VITE_API_KEY }}" >> .env
+          echo "VITE_API_ID=${{ secrets.VITE_API_ID }}" >> .env
+          echo "VITE_DOMAIN=${{ secrets.VITE_DOMAIN }}" >> .env
+          echo "VITE_PROJECT_ID=${{ secrets.VITE_PROJECT_ID }}" >> .env
+          echo "VITE_VITE_SENDER=${{ secrets.VITE_SENDER }}" >> .env
+          echo "VITE_BUCKET=${{ secrets.VITE_BUCKET }}" >> .env
+          echo "VITE_CLOUDINARY_NAME=${{ secrets.VITE_CLOUDINARY_NAME }}" >> .env
+          echo "VITE_PRESSET_NAME=${{ secrets.VITE_PRESSET_NAME }}" >> .env
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Deploy to GitHub Pages
+        run: npm run deploy
