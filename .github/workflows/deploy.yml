@@ -21,6 +21,11 @@ jobs:
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
 
+      - name: Install Dependencies
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
       - name: Create .env File
         run: |
           echo "VITE_API_KEY=${{ secrets.VITE_API_KEY }}" >> .env
