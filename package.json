@@ -8,7 +8,8 @@
     "predeploy": "vite build",
     "deploy": "gh-pages -d dist",
     "dev": "vite",
-    "build": "vite build --base=/todo-app/",
+    "build": "vite build && npm run copy-src",
+    "copy-src": "npx ncp src dist/src",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -37,6 +38,7 @@
     "eslint-plugin-react-refresh": "^0.4.18",
     "gh-pages": "^6.3.0",
     "globals": "^15.14.0",
+    "ncp": "^2.0.0",
     "vite": "^6.1.0"
   }
 }
