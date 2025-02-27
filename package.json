@@ -8,8 +8,7 @@
     "predeploy": "vite build",
     "deploy": "gh-pages -d dist",
     "dev": "vite",
-    "build": "vite build && npm run copy-src",
-    "copy-src": "npx ncp src dist/src",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
