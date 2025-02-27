@@ -15,4 +15,4 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export { auth, db, createUserWithEmailAndPassword, signInWithEmailAndPassword, collection, addDoc, doc, setDoc, getDoc, onAuthStateChanged, signOut, updateDoc, updateEmail, updatePassword, deleteUser, deleteDoc, EmailAuthCredential, reauthenticateWithCredential, getDocs };
+export { auth, db, createUserWithEmailAndPassword, signInWithEmailAndPassword, collection, addDoc, doc, setDoc, getDoc, onAuthStateChanged, signOut, updateDoc, updateEmail, updatePassword, deleteUser, deleteDoc, EmailAuthCredential, reauthenticateWithCredential, getDocs, getAuth };

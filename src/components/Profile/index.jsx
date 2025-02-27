@@ -111,16 +111,8 @@ const Index = () => {
           id: userId,
           firstName: firstName,
           age: age,
-        }
-        
-        if (lastName.length > 0) {
-          userObject.lastName = lastName
-        }
-        
-        if(image) {
-          userObject.image = await loadImage(image)
-        } else {
-          userObject.image = user.image;
+          lastName: lastName.length > 0 ? lastName : user.lastName,
+          image: image ? await loadImage(image) : user.image
         }
         
         if (password.length > 0) {

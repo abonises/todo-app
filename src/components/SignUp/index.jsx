@@ -20,6 +20,8 @@ const Index = () => {
   const [age, setAge] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({ email: '', password: '' , name: '', age: ''});
+  const [errorMessage, setErrorMessage] = useState('')
+  
   const validate = (email, password, name, age) => {
     let isValid = true;
     
@@ -85,6 +87,7 @@ const Index = () => {
         
       } catch (err) {
         console.log('unlucky')
+        err.code === 'auth/email-already-in-use' ? setErrorMessage('User with this email already exists') : setErrorMessage('Server Error. Please try letter')
       } finally {
         setIsLoading(false)
       }
@@ -97,6 +100,7 @@ const Index = () => {
   return (
       <div className="register">
         <h2 className="register__title">Sign Up</h2>
+        <div className='register__error'>{errorMessage}</div>
         <form onSubmit={handleRegister} className='register__form'>
           <div className='register__top'>
             <InputField
@@ -144,7 +148,7 @@ const Index = () => {
                   handler={handleRegister}
               />
           ) : (
-              <Loader />
+              <Loader/>
           )}
         </form>
       </div>

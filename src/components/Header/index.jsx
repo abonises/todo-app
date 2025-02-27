@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './index.scss'
 import {useAuth} from "../../context/auth.jsx";
+import cn from 'classnames'
 import {useNavigate} from "react-router-dom";
 import { useLocation } from 'react-router-dom'
 
@@ -49,13 +50,13 @@ const Index = () => {
           {user && (
               <span className='header__login-count'>Logins Count: {user.loginsCount || 0}</span>
           )}
-          {user && user.role === 'admin' && !isAdmin &&  (
-              <div className="header__admin" onClick={() => handleAdmin()}>
+          {user && user.role === 'admin' &&  (
+              <div className={cn('header__admin', isAdmin && 'current')} onClick={() => handleAdmin()}>
                 A
               </div>
           )}
-          {user && !isProfile && (
-              <div className="header__profile" onClick={() => handleProfile()}>
+          {user && (
+              <div className={cn('header__profile', isProfile && 'current')} onClick={() => handleProfile()}>
                 <img src="/user.svg" alt="profile"/>
               </div>
           )}

@@ -4,4 +4,5 @@ export const validationErrors = {
   ageError: 'You must be 18 y.o for registration',
   nameError: 'Minimum length is 2 characters',
   taskError: 'Minimum length is 2 characters',
+  roleError: 'Please select role from list',
 }

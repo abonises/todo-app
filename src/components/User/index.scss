@@ -1,0 +1,138 @@
+.user {
+  display: grid;
+  grid-template-columns: 60px 230px 230px 230px 230px 80px 100px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(189, 184, 184, 0.5);
+  text-align: center;
+  width: 100%;
+
+  &:hover {
+    background-color: #f7f7f7;
+    cursor: pointer;
+  }
+
+  img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  span {
+    padding: 0 15px;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    margin-top: 57px;
+    width: 100%;
+  }
+
+  &__error-edit {
+    margin-top: 6px;
+    font-size: 14px;
+    line-height: 1.2;
+    color: #FF0000;
+    transition: 0.3s all;
+  }
+
+  &__successful {
+    margin-top: 6px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.2;
+    color: #156B2D;
+    transition: 0.3s all;
+  }
+
+  &__image-container {
+    position: relative;
+    padding: 75px;
+    border-radius: 175px;
+    min-width: 200px;
+    min-height: 200px;
+    background-color: #DCDCDC;
+    cursor: pointer;
+    overflow: hidden;
+
+    &:hover {
+      transform: scale(0.97);
+      transition: 0.3s all;
+      box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  @media screen and (max-width: 575px) {
+    &__image-container {
+      min-width: 150px;
+      min-height: 150px;
+    }
+  }
+
+  &__image-input {
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    left: 0;
+    z-index: 101;
+    width: 100%;
+    height: 100%;
+    border-radius: 175px;
+    cursor: pointer;
+  }
+
+  &__edit-icon {
+    position: absolute;
+    max-width: 20px;
+    max-height: 20px;
+    top: 15%;
+    right: 15%;
+    z-index: 100;
+  }
+
+  &__user-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 175px;
+    position: absolute;
+    inset: 0;
+  }
+
+  &__modal-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  &__role-select {
+    padding: 5px 20px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s all;
+    border-radius: 5px;
+
+    &:hover {
+      background: rgba(236, 234, 234, 0.46);
+    }
+  }
+}
+
+.modal__content {
+  width: 40%;
+}
+
+@media screen and (max-width: 1024px) {
+  .modal__content {
+    width: 60%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .modal__content {
+    width: 90%;
+  }
+}

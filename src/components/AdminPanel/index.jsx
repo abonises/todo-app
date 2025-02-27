@@ -6,6 +6,9 @@ import UsersList from "../UsersList/index.jsx";
 import Loader from "../UI/Loader/index.jsx";
 import {db} from "../../firabase/firebase.js";
 import {useNavigate} from "react-router-dom";
+import Button from "../UI/Button/index.jsx";
+import Modal from "../UI/Modal/index.jsx";
+import CreateUser from "../CreateUser/index.jsx";
 
 const Index = () => {
   
@@ -42,10 +45,16 @@ const Index = () => {
   
   return (
       <div className='admin'>
-        <h1 className='admin__title'>Hello <span>{user.firstName}</span></h1>
-        {isLoading ? <Loader />
-        : (<UsersList
-              users={users}
+        <div className='admin__top'>
+          <h1 className='admin__title'>Hello <span>{user.firstName}</span></h1>
+          <CreateUser
+              setUsers={setUsers}
+          />
+        </div>
+        {isLoading ? <Loader/>
+            : (<UsersList
+                users={users}
+              setUsers={setUsers}
           />)}
       </div>
   );
